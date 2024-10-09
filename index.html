@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Задание 6</title>
+    <style>
+        .hidden {
+            display: none; /* Скрывает элементы */
+        }
+    </style>
+</head>
+<body>
+    <b>Расчет стоимости заказа</b>
+    <form>
+        <select name="variant">
+            <option selected="selected">Выберите товар</option>
+            <option>Кошачий корм</option>
+            <option>Хлеб</option>
+            <option>Ягоды</option>
+            <option>Фрукты</option>
+        </select>
+        
+        <label for="quantity">Количество:</label>
+        <input type="text" id="col" value="" placeholder="Количество">
+
+        <div class="myradios" id="myradios">
+            <label for="type">Тип услуги:</label>
+            <label><input type="radio" name="myradio" value="r1" onclick="toggleOptions()">Тип 1</label>
+            <label><input type="radio" name="myradio" value="r2" onclick="toggleOptions()">Тип 2</label>
+            <label><input type="radio" name="myradio" value="r3" onclick="toggleOptions()">Тип 3</label>
+        </div>
+    
+        <div id="options-container" class="hidden">
+            <label for="option">Опция:</label>
+            <select id="option" name="option">
+                <option value="option1">Опция 1</option>
+                <option value="option2">Опция 2</option>
+                <option value="option3">Опция 3</option>
+            </select>
+        </div>
+
+        <div id="property-container" class="hidden">
+            <label for="property">Свойство:</label>
+            <label><input type="checkbox" id="s1" name="property">Свойство 1</label>
+            <label><input type="checkbox" id="s2" name="property">Свойство 2</label>
+            <label><input type="checkbox" id="s3" name="property">Свойство 3</label>
+        </div>
+
+        <button type="button" onclick="calculateCost()">Рассчитать стоимость</button>
+    </form>
+    <div id="result">Результат:</div>
+    
+    <script>
+        const optionsContainer = document.getElementById("options-container");
+        const propertyContainer = document.getElementById("property-container");
+    
+        function toggleOptions() {
+            const selectedType = document.querySelector('input[name="myradio"]:checked');
+    
+            if (selectedType) {
+                if (selectedType.value === "r1") {
+                    optionsContainer.classList.add("hidden");
+                    propertyContainer.classList.add("hidden");
+                } else if (selectedType.value === "r2") {
+                    optionsContainer.classList.remove("hidden");
+                    propertyContainer.classList.add("hidden");
+                } else if (selectedType.value === "r3") {
+                    optionsContainer.classList.add("hidden");
+                    propertyContainer.classList.remove("hidden");
+                }
+            }
+        }
+    
+        function calculateCost() {
+            let cena = 0;
+            const col = parseFloat(document.getElementById("col").value) || 0; // Количество товаров
+            const selectedVariant = document.querySelector('select[name="variant"]').value;
+
+            // Определение базовой цены в зависимости от выбранного товара
+            switch (selectedVariant) {
+                case "Кошачий корм":
+                    cena = 20; // Примерная цена
+                    break;
+                case "Хлеб":
+                    cena = 15; // Примерная цена
+                    break;
+                case "Ягоды":
+                    cena = 50; // Примерная цена
+                    break;
+                case "Фрукты":
+                    cena = 30; // Примерная цена
+                    break;
+                default:
+                    alert("Пожалуйста, выберите товар.");
+                    return;
+            }
+
+            // Установка цены в зависимости от типа услуги
+            const selectedType = document.querySelector('input[name="myradio"]:checked');
+            if (selectedType) {
+                if (selectedType.value === "r1") {
+                    cena += 5; // Дополнительная цена для типа 1
+                } else if (selectedType.value === "r2") {
+                    cena += 10; // Дополнительная цена для типа 2
+                } else if (selectedType.value === "r3") {
+                    cena += 15; // Дополнительная цена для типа 3
+                }
+            }
+
+            // Обработка выбранных опций
+            const selectedOption = document.getElementById("option");
+            if (selectedOption && selectedOption.value) {
+                switch (selectedOption.value) {
+                    case "option1":
+                        cena += 5;
+                        break;
+                    case "option2":
+                        cena += 10;
+                        break;
+                    case "option3":
+                        cena += 15;
+                        break;
+                }
+            }
+
+            // Обработка выбранных свойств
+            const propertyCheckboxes = document.querySelectorAll('input[name="property"]:checked');
+            propertyCheckboxes.forEach(checkbox => {
+                if (checkbox.id === "s1") {
+                    cena += 5; // Дополнительная цена для свойства 1
+                } else if (checkbox.id === "s2") {
+                    cena += 10; // Дополнительная цена для свойства 2
+                } else if (checkbox.id === "s3") {
+                    cena += 15; // Дополнительная цена для свойства 3
+                }
+            });
+
+            // Общая стоимость с учетом количества
+            const totalCost = cena * col;
+            document.getElementById("result").innerText = "Результат: " + totalCost;
+        }
+    </script>
+</body>
+</html>
+
